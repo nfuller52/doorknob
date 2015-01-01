@@ -1,11 +1,11 @@
 <?php
 /*
 Plugin Name: Doorknob
-Version: 0.1-alpha
-Description: PLUGIN DESCRIPTION HERE
-Author: YOUR NAME HERE
-Author URI: YOUR SITE HERE
-Plugin URI: PLUGIN SITE HERE
+Version: 0.0.2
+Description: An Oauth manager for Apollo integration.
+Author: Nick Fuller
+Author URI: http://www.pawsplus.com
+Plugin URI: http://www.pawsplus.com
 Text Domain: doorknob
 Domain Path: /languages
 */
