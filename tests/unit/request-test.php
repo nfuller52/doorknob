@@ -71,4 +71,10 @@ class RequestTest extends WP_UnitTestCase
 		$this->assertSame( $me_url, $this->options['staging_me_url'] );
 	}
 
+	public function test_get_request_not_logged_in()
+	{
+		$response = $this->request->get( 'phonyurl' );
+		$this->assert
+	}
+
 }
