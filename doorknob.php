@@ -19,4 +19,20 @@ require_once( DOORKNOB_PLUGIN_DIR . '/inc/autoloader.php' );
 Autoloader::register();
 
 if ( !array_key_exists( 'dk_doorknob', $GLOBALS ) ) {
+	$GLOBALS['doorknob'] = new Doorknob();
+}
+
+class Doorknob
+{
+
+	public function __construct()
+	{
+		if ( is_admin() ) $this->admin_settings();
+	}
+
+	private function admin_settings()
+	{
+		new Admin_Settings( 'doorknob_general', 'doorknob_settings_section' );
+	}
+
 }

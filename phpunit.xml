@@ -9,8 +9,11 @@
 	printerClass="NyanCat\PHPUnit\ResultPrinter"
 	>
 	<testsuites>
-		<testsuite>
-			<directory prefix="test-" suffix=".php">./tests/</directory>
+		<testsuite name="unit">
+			<directory suffix="-test.php">./tests/unit</directory>
+		</testsuite>
+		<testsuite name="integration">
+			<directory suffix="-test.php">./tests/integration</directory>
 		</testsuite>
 	</testsuites>
 </phpunit>
