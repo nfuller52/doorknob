@@ -3,7 +3,7 @@ namespace PawsPlus\Doorknob;
 
 defined( 'ABSPATH' ) or die( "It's a trap!" );
 
-class Admin_Settings
+class AdminSettings
 {
 
 	public function __construct( $page, $section )
@@ -118,6 +118,11 @@ class Admin_Settings
 		return $new_input;
 	}
 
+	/*
+	* -------------------------
+	* Admin fields
+	* -------------------------
+	*/
 	private function admin_fields()
 	{
 		return array(
