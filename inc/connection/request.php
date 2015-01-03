@@ -1,5 +1,5 @@
 <?php
-namespace PawsPlus\Doorknob;
+namespace PawsPlus\Doorknob\Connection;
 
 defined( 'ABSPATH' ) or die( "It's a trap!" );
 

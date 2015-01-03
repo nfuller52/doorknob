@@ -1,5 +1,5 @@
 <?php
-use PawsPlus\Doorknob\Request as Request;
+use PawsPlus\Doorknob\Connection\Request as Request;
 
 class RequestTest extends WP_UnitTestCase
 {
@@ -24,24 +24,24 @@ class RequestTest extends WP_UnitTestCase
 
 	function test_request_can_be_instantiated()
 	{
-		// Arrange
+		// Given
 		$request = new Request();
 
-		// Act
+		// When
 
-		// Assert
-		$this->assertInstanceOf( 'PawsPlus\Doorknob\Request', $request );
+		// Then
+		$this->assertInstanceOf( 'PawsPlus\Doorknob\Connection\Request', $request );
 	}
 
 	function test_environment()
 	{
-		// Arrange
+		// Given
 		$request = new Request();
 
-		// Act
+		// When
 		$environment = $request->environment();
 
-		// Assert
+		// Then
 		$this->assertSame( $environment, 'test' );
 	}
 
