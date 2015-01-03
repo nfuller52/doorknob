@@ -16,32 +16,32 @@ class RequestTest extends WP_UnitTestCase
 		add_option( 'apollo', serialize( $options ) );
 	}
 
-	function tearDown()
+	public function tearDown()
 	{
 		delete_option( 'apollo' );
+
 		parent::tearDown();
 	}
 
-	function test_request_can_be_instantiated()
+	/**
+	* @test
+	*/
+	public function test_request_can_be_instantiated()
 	{
-		// Given
 		$request = new Request();
 
-		// When
-
-		// Then
 		$this->assertInstanceOf( 'PawsPlus\Doorknob\Connection\Request', $request );
 	}
 
-	function test_environment()
+	/**
+	* @test
+	*/
+	public function test_environment()
 	{
-		// Given
 		$request = new Request();
 
-		// When
 		$environment = $request->environment();
 
-		// Then
 		$this->assertSame( $environment, 'test' );
 	}
 

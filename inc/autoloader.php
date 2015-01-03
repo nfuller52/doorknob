@@ -4,7 +4,7 @@ namespace PawsPlus\Doorknob;
 class Autoloader
 {
 
-	private static $namespace = 'PawsPlus\Doorknob';
+	private static $namespace = __NAMESPACE__;
 
 	public static function register()
 	{
@@ -21,7 +21,12 @@ class Autoloader
 		$class = preg_replace( '/([a-zA-Z])(?=[A-Z])/', '$1_', $class );
 		$file = dirname( __FILE__ ) . strtolower( str_replace( '\\', DIRECTORY_SEPARATOR, $class ) ) . '.php';
 
-		if ( is_file( $file ) ) require_once( $file );
+		if ( is_file( $file ) ) {
+			require_once( $file );
+			return $file;
+		} else {
+			return false;
+		}
 	}
 
 }
