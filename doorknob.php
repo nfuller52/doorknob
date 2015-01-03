@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Doorknob
-Version: 0.0.2
+Version: 0.0.3
 Description: An Oauth manager for Apollo integration.
 Author: Nick Fuller
 Author URI: http://www.pawsplus.com
