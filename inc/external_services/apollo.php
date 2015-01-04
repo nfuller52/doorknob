@@ -10,13 +10,30 @@ namespace PawsPlus\Doorknob\ExternalServices;
 
 use PawsPlus\Doorknob\DoorknobOptions as Options;
 use PawsPlus\Doorknob\Errors\Error as Error;
+use PawsPlus\Doorknob\ExternalServices\HttpRequest as HttpRequest;
 use PawsPlus\Doorknob\Models\ApolloUser as ApolloUser;
 
 class Apollo
 {
 
 	/** @var Options */
-	private $options = new Options();
+	private $options;
+
+	/** @var HttpRequest */
+	private $request;
+
+	/**
+	* Constructor method
+	*
+	* @param PawsPlus\Doorknob\DoorknobOptions $options
+	*
+	* @return voide
+	*/
+	public function __construct( Options $options, HttpRequest $request )
+	{
+		$this->options = $options;
+		$this->request = $request;
+	}
 
 	/**
 	* Fetch access and refresh tokens via grant type of password
@@ -51,7 +68,7 @@ class Apollo
 	* @return array standardized response from Apollo
 	* @return error if connection was not successful or unauthorized
 	*/
-	public function user( array $token_items )
+	public function user( $username, $password )
 	{
 		if ( empty( $token_items ) ) return Error::invalid_credentials();
 
@@ -63,11 +80,7 @@ class Apollo
 
 		$response = $this->request( 'GET', $this->options->me_url(), $params );
 
-		if ( is_wp_error( $response ) ) {
-			return $response;
-		} else {
-			return new ApolloUser( $response['body'] );
-		}
+		return $response;
 	}
 
 	/**
@@ -102,15 +115,15 @@ class Apollo
 	* @return array standardized response from Apollo
 	* @return error if connection was not successful
 	*/
-	private function request( $http_method, $url, array $params )
+	public function request( $http_method, $url, array $params )
 	{
 		$params['method']  = strtoupper( $http_method );
 		$params['timeout'] = $this->options->timeout();
 
-		$response = wp_remote_reqeust( $url, $params );
+		$response = \wp_remote_request( $url, $params );
 
 		if ( is_wp_error( $response ) ) {
-			return Error::failed_onnection( $response->get_error_message() );
+			return Error::failed_connection( $response->get_error_message() );
 		} elseif ( $response['response']['code'] === 401 ) {
 			return Error::invalid_credentials();
 		} else {

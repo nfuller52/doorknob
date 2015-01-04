@@ -20,7 +20,12 @@ require_once( DOORKNOB_PLUGIN_DIR . '/inc/autoloader.php' );
 Autoloader::register();
 
 if ( !array_key_exists( 'dk_doorknob', $GLOBALS ) ) {
-	$GLOBALS['pp_doorknob'] = new Doorknob();
+
+	function initialize_plugin()
+	{
+		$GLOBALS['pp_doorknob'] = new Doorknob();
+	}
+	add_action( 'init', 'PawsPlus\Doorknob\initialize_plugin' );
 
 	/**
 	* Create global functions for other plugins to utilize

@@ -5,7 +5,12 @@ namespace PawsPlus\Doorknob;
 class DoorknobOptions
 {
 	/** @var private options */
-	private $options = unserialize( get_option( 'doorknob_options' ) );
+	private $options;
+
+	public function __construct()
+	{
+		$this->options = get_option( 'doorknob_options' );
+	}
 
 	/**
 	* Return the current environment setting for the plugin
@@ -49,7 +54,7 @@ class DoorknobOptions
 	*
 	* @return string
 	*/
-	private function url_type( string $type )
+	private function url_type( $type )
 	{
 		$url = $this->environment() . '_' . strtolower( $type ) . '_url';
 		return $this->options[$url];
