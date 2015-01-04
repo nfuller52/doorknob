@@ -11,6 +11,7 @@ Domain Path: /languages
 */
 
 namespace PawsPlus\Doorknob;
+use PawsPlus\Doorknob\Models\AdminSettings as AdminSettings;
 
 defined( 'ABSPATH' ) or die( "It's a trap!" );
 define( 'DOORKNOB_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );

@@ -1,12 +1,23 @@
 <?php
 
-namespace PawsPlus\Doorknob;
+/**
+* An interface to accessing the Plugin Options
+*
+* @category Models
+*/
 
-class DoorknobOptions
+namespace PawsPlus\Doorknob\Models;
+
+class Options
 {
 	/** @var private options */
 	private $options;
 
+	/**
+	* Constructor method
+	*
+	* @return void
+	*/
 	public function __construct()
 	{
 		$this->options = get_option( 'doorknob_options' );
@@ -42,6 +53,11 @@ class DoorknobOptions
 		return $this->url_type( 'me' );
 	}
 
+	/**
+	* Return the timeout value requests will stick around for
+	*
+	* @return integer
+	*/
 	public function timeout()
 	{
 		return $this->options['timeout'];

@@ -1,6 +1,6 @@
 <?php
 
-use PawsPlus\Doorknob\ExternalServices\Apollo as Apollo;
+use PawsPlus\Doorknob\Models\Apollo as Apollo;
 
 class ApolloTest extends WP_UnitTestCase
 {
@@ -9,20 +9,20 @@ class ApolloTest extends WP_UnitTestCase
 	{
 		parent::setUp();
 
-		$this->options = $this->getMockBuilder( 'PawsPlus\Doorknob\DoorknobOptions' )
+		$this->options = $this->getMockBuilder( 'PawsPlus\Doorknob\Models\Options' )
+			->setMethods( array( 'token_url', 'me_url' ) )
 			->getMock();
 
-		$this->mockApollo = $this->getMockBuilder( 'PawsPlus\Doorknob\DoorknobOptions' )
-			->setConstructorArgs( array( $this->options ) )
-			->setMethods( array( 'request' ) )
+		$this->http = $this->getMockBuilder( 'PawsPlus\Doorknob\Services\Http' )
+			->setMethods( array( 'post', 'get' ) )
 			->getMock();
 
-		$this->apollo = new Apollo( $this->options );
+		$this->apollo = new Apollo( $this->options, $this->http );
 	}
 
-	public function testItCanBe()
+	public function testItCanBeInstantiated()
 	{
-		$this->assertInstanceOf( 'PawsPlus\Doorknob\ExternalServices\Apollo', $this->apollo );
+		$this->assertInstanceOf( 'PawsPlus\Doorknob\Models\Apollo', $this->apollo );
 	}
 
 	public function testRequestTokensFailsWithoutUsername()
@@ -39,12 +39,48 @@ class ApolloTest extends WP_UnitTestCase
 
 	public function testRequestTokensReturnsArrayUponSuccess()
 	{
-		$this->mockApollo->expects( $this->once() )
-			->method( 'request' )
+		$this->http->expects( $this->once() )
+			->method( 'post' )
 			->will( $this->returnValue( array() ) );
 
 		$result = $this->apollo->request_tokens( 'user@email.com', 'secret_password' );
 		$this->assertInternalType( 'array', $result );
+	}
+
+	public function testRequestTokensReturnsWPErrorUponFailure()
+	{
+		$this->http->expects( $this->once() )
+			->method( 'post' )
+			->will( $this->returnValue( new WP_Error() ) );
+
+		$result = $this->apollo->request_tokens( 'user@email.com', 'secret_password' );
+		$this->assertInstanceOf( 'WP_Error', $result );
+	}
+
+	public function testUserFailsWithBlankToken()
+	{
+		$result = $this->apollo->user( '' );
+		$this->assertInstanceOf( 'WP_Error', $result );
+	}
+
+	public function testUserReturnsArrayUponSuccess()
+	{
+		$this->http->expects( $this->once() )
+			->method( 'get' )
+			->will( $this->returnValue( array() ) );
+
+		$result = $this->apollo->user( 'access_token' );
+		$this->assertInternalType( 'array', $result );
+	}
+
+	public function testUserReturnsWPErrorUponFailure()
+	{
+		$this->http->expects( $this->once() )
+			->method( 'get' )
+			->will( $this->returnValue( new WP_Error() ) );
+
+		$result = $this->apollo->user( 'access_token' );
+		$this->assertInstanceOf( 'WP_Error', $result );
 	}
 
 }

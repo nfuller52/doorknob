@@ -1,7 +1,7 @@
 <?php
+namespace PawsPlus\Doorknob\Support;
 
-namespace PawsPlus\Doorknob\Errors;
-use PawsPlus\Doorknob\Logger as Logger;
+use PawsPlus\Doorknob\Support\Logger as Logger;
 
 /**
 * Handles errors reported by the plugin

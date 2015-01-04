@@ -1,5 +1,5 @@
 <?php
-namespace PawsPlus\Doorknob;
+namespace PawsPlus\Doorknob\Support;
 
 class Logger
 {
