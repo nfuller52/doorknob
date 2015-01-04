@@ -10,6 +10,7 @@ namespace PawsPlus\Doorknob\ExternalServices;
 
 use PawsPlus\Doorknob\DoorknobOptions as Options;
 use PawsPlus\Doorknob\Errors\Error as Error;
+use PawsPlus\Doorknob\Models\ApolloUser as ApolloUser;
 
 class Apollo
 {
@@ -43,6 +44,33 @@ class Apollo
 	}
 
 	/**
+	* Fetch the user meta from Apollo once authenticated
+	*
+	* @param array $token_items 3 items, access_token, refresh_token and expires_in
+	*
+	* @return array standardized response from Apollo
+	* @return error if connection was not successful or unauthorized
+	*/
+	public function user( array $token_items )
+	{
+		if ( empty( $token_items ) ) return Error::invalid_credentials();
+
+		$params = array(
+			'headers' => array(
+				'Authorization' => 'Bearer ' . $token_items
+			)
+		);
+
+		$response = $this->request( 'GET', $this->options->me_url(), $params );
+
+		if ( is_wp_error( $response ) ) {
+			return $response;
+		} else {
+			return new ApolloUser( $response['body'] );
+		}
+	}
+
+	/**
 	* Fetch new access and refresh tokens upon original expiration of
 	* access token
 	*
@@ -53,11 +81,9 @@ class Apollo
 	*/
 	public function refresh_access_token( $refresh_token )
 	{
-		if ( empty( $token ) ) return Error::blank_token();
+		if ( empty( $refresh_token ) ) return Error::blank_token();
 
 		$params = array(
-			'body' => array(
-			),
 			'headers' => array(
 				'Authorization' => 'Bearer ' . $refresh_token
 			)
@@ -66,6 +92,16 @@ class Apollo
 		return $this->request( 'GET', $this->options->token_url(), $params );
 	}
 
+	/**
+	* Make a request to the Apollo web service.
+	*
+	* @param string $http_method a valid http protocol
+	* @param string $url         the url being requested
+	* @param array  $params      http options and/or parameters
+	*
+	* @return array standardized response from Apollo
+	* @return error if connection was not successful
+	*/
 	private function request( $http_method, $url, array $params )
 	{
 		$params['method']  = strtoupper( $http_method );
@@ -82,6 +118,15 @@ class Apollo
 		}
 	}
 
+	/**
+	* Map a response from the wordpress function wp_remote_request.
+	* Standardize API response into a useable array. This method should
+	* act as a funnel for all responses from Apollo.
+	*
+	* @param array $response a response object from wp_remote_request
+	*
+	* @return array standardized response from Apollo
+	*/
 	private function map_response( $response )
 	{
 		$payload = array();
