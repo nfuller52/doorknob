@@ -115,6 +115,12 @@ class AdminSettings
 			}
 		}
 
+		if ( isset( $new_input['timeout'] ) && is_int( (int) $new_input['timeout'] ) ) {
+			$new_input['timeout'] = (int) $new_input['timeout'];
+		} else {
+			$new_input['timeout'] = null;
+		}
+
 		return $new_input;
 	}
 
@@ -180,6 +186,12 @@ class AdminSettings
 				'type'        => 'text_field',
 				'value'       => esc_attr( $this->options['production_me_url'] ),
 				'placeholder' => 'Production Me URL'
+			),
+			array(
+				'name'        => 'timeout',
+				'type'        => 'text_field',
+				'value'       => esc_attr( $this->options['timeout'] ),
+				'placeholder' => 'Timeout in Seconds'
 			)
 		);
 	}
